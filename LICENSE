@@ -1,0 +1,15 @@
+﻿# ResumeForge Source License
+
+Copyright (c) 2026 ResumeForge contributors.
+
+All rights reserved for original ResumeForge additions, including its future product
+features, branding, documentation, and assets, except where a file states another
+license or is identified in `THIRD_PARTY_NOTICES.md`.
+
+No permission is granted by this file to use, copy, modify, distribute, sublicense,
+or sell the original ResumeForge additions. Contact the repository owner for a
+commercial or other license.
+
+Third-party and upstream material remains subject to its own license. In particular,
+this repository contains material derived from CanvasEditor, which remains available
+under the MIT License reproduced in `THIRD_PARTY_NOTICES.md`.
