@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ContentChangeEvent } from "sketching-core";
 import { Editor, EDITOR_EVENT, LOG_LEVEL, Range } from "sketching-core";
 import { DeltaSet } from "sketching-delta";
@@ -7,6 +7,7 @@ import { Storage } from "sketching-utils";
 
 import { WithEditor } from "../../hooks/use-editor";
 import { Background } from "../../modules/background";
+import { loadTemplate, TEMPLATE_CONFIG } from "../../modules/template";
 import type { LocalStorageData } from "../../utils/storage";
 import { EXAMPLE, STORAGE_KEY } from "../../utils/storage";
 import { Body } from "../body";
@@ -17,9 +18,33 @@ import { Header } from "../header";
 Storage.setSuffix("");
 
 export const App: FC = () => {
+  const [initialData, setInitialData] = useState<LocalStorageData | null>(() =>
+    Storage.local.get<LocalStorageData>(STORAGE_KEY)
+  );
+
+  useEffect(() => {
+    if (initialData) return;
+    const defaultTemplate = TEMPLATE_CONFIG.find(item => item.name === "FE-Wxy");
+    if (!defaultTemplate) {
+      setInitialData(EXAMPLE);
+      return;
+    }
+    void loadTemplate(defaultTemplate.template).then(data => {
+      const resolved = data || EXAMPLE;
+      Storage.local.set(STORAGE_KEY, resolved);
+      setInitialData(resolved);
+    });
+  }, [initialData]);
+
+  if (!initialData) return null;
+
+  return <ResumeEditor initialData={initialData}></ResumeEditor>;
+};
+
+const ResumeEditor: FC<{ initialData: LocalStorageData }> = ({ initialData }) => {
   const ref = useRef<HTMLDivElement>(null);
   const editor = useMemo(() => {
-    const data = Storage.local.get<LocalStorageData>(STORAGE_KEY) || EXAMPLE;
+    const data = initialData;
     Background.setRange(Range.fromRect(data.x, data.y, data.width, data.height));
     const deltaSetLike = data && data.deltaSetLike;
     return new Editor({
