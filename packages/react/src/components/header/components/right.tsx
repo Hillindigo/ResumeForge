@@ -154,7 +154,7 @@ export const Right: FC<{
       <a
         className={styles.github}
         target="_blank"
-        href={"https://github.com/WindrunnerMax/CanvasEditor"}
+        href={"https://github.com/Hillindigo/ResumeForge"}
       >
         <IconGithub />
       </a>
